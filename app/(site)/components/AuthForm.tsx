@@ -120,7 +120,7 @@ const AuthForm = () => {
               : "Already have an account?"}
           </div>
           <div onClick={toggleVariant} className="underline cursor-pointer">
-            {variant === "LOGIN" ? "Craete an account" : "Login"}
+            {variant === "LOGIN" ? "Create an account" : "Login"}
           </div>
         </div>
       </div>
