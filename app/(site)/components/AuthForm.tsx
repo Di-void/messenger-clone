@@ -62,12 +62,14 @@ const AuthForm = () => {
       // NextAuth SignIn
       signIn("credentials", { ...data, redirect: false })
         .then((callback) => {
+          console.log(callback);
           if (callback?.error) {
             toast.error("Invalid Credentials!");
           }
 
           if (callback?.ok && !callback?.error) {
             toast.success("Logged In!");
+            router.push("/users");
           }
         })
         .finally(() => setIsLoading(false));
