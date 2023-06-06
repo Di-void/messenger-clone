@@ -9,19 +9,22 @@ import { BsGithub, BsGoogle } from "react-icons/bs";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type Variant = "LOGIN" | "REGISTER";
 
 const AuthForm = () => {
   const session = useSession();
+  const router = useRouter();
   const [variant, setVariant] = useState<Variant>("LOGIN");
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (session?.status === "authenticated") {
-      console.log("Authenticated");
+      // redirect authenticated user to users page
+      router.push("/users");
     }
-  }, [session?.status]);
+  }, [session?.status, router]);
 
   // memoize func
   const toggleVariant = useCallback(() => {
@@ -50,6 +53,7 @@ const AuthForm = () => {
     if (variant === "REGISTER") {
       axios
         .post("/api/register", data)
+        .then(() => signIn("credentials", data))
         .catch(() => toast.error("Something Went Wrong!"))
         .finally(() => setIsLoading(false));
     }
@@ -81,6 +85,7 @@ const AuthForm = () => {
 
         if (callback?.ok && !callback?.error) {
           toast.success("Logged In!");
+          router.push("/users");
         }
       })
       .finally(() => setIsLoading(false));
